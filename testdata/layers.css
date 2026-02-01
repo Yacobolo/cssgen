@@ -1,0 +1,8 @@
+@layer base, components, utilities;
+
+@layer utilities {
+  .flex-center {
+    display: flex;
+    justify-content: center;
+  }
+}

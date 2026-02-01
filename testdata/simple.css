@@ -1,0 +1,6 @@
+@layer components {
+  .btn {
+    display: inline-flex;
+    padding: 1rem;
+  }
+}

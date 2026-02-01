@@ -1,0 +1,18 @@
+@layer components {
+  .btn {
+    color: blue;
+  }
+  
+  .btn:hover {
+    color: darkblue;
+  }
+  
+  .btn--primary,
+  .btn--secondary {
+    font-weight: bold;
+  }
+  
+  ._internal-base {
+    display: block;
+  }
+}
