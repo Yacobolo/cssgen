@@ -1,19 +1,19 @@
-# cssgen
+<h1 align="center">cssgen</h1>
 
 <p align="center">
   <strong>Type-safe CSS class constants for Go/templ projects.</strong>
-  <br><br>
+  <br>
   <a href="https://pkg.go.dev/github.com/yacobolo/cssgen">
-    <img src="https://pkg.go.dev/badge/github.com/yacobolo/cssgen.svg" alt="Go Reference">
+    <img src="https://img.shields.io/badge/go-reference-007d9c?logo=go&logoColor=white&style=flat-square" alt="Go Reference">
   </a>
   <a href="https://goreportcard.com/report/github.com/yacobolo/cssgen">
-    <img src="https://goreportcard.com/badge/github.com/yacobolo/cssgen" alt="Go Report Card">
+    <img src="https://goreportcard.com/badge/github.com/yacobolo/cssgen?style=flat-square" alt="Go Report Card">
   </a>
   <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT">
   </a>
   <a href="https://github.com/yacobolo/cssgen/actions">
-    <img src="https://github.com/yacobolo/cssgen/workflows/CI/badge.svg" alt="CI">
+    <img src="https://img.shields.io/github/actions/workflow/status/yacobolo/cssgen/ci.yml?branch=main&style=flat-square&label=CI" alt="CI Status">
   </a>
 </p>
 
