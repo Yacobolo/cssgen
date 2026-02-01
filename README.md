@@ -455,7 +455,3 @@ Issues and pull requests welcome at https://github.com/yacobolo/cssgen
 - [tdewolff/parse](https://github.com/tdewolff/parse) - CSS parser
 - [bmatcuk/doublestar](https://github.com/bmatcuk/doublestar) - Glob matching
 - [fatih/color](https://github.com/fatih/color) - Terminal colors
-
----
-
-*Extracted from [go-scheduler](https://github.com/Oestergaard-A-S/go-scheduler) as a standalone tool.*
