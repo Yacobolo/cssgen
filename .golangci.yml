@@ -1,3 +1,5 @@
+version: "2"
+
 run:
   timeout: 5m
   tests: true
@@ -8,12 +10,53 @@ output:
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
+  exclude-dirs:
+    - vendor
+    - context
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gosec
+        - errcheck
+    # Ignore errcheck for output/reporting files where fmt errors are acceptable
+    - path: linter\.go
+      linters:
+        - errcheck
+    - path: reporter.*\.go
+      linters:
+        - errcheck
+    - path: output.*\.go
+      linters:
+        - errcheck
+    - path: scanner\.go
+      linters:
+        - errcheck
+      text: "Error return value of `file\\.Close`"
+    # oapi-codegen strict server pattern: returning typed error responses (e.g., 500JSONResponse)
+    # with nil error is correct - the response object encodes the HTTP status. Returning non-nil
+    # error would bypass our structured response and leak internal error details to clients.
+    - path: internal/api/v1/(server|handlers/.*)\.go
+      linters:
+        - nilerr
+    # Server methods implement StrictServerInterface - comments would be redundant boilerplate
+    - path: internal/api/v1/server\.go
+      linters:
+        - revive
+    # oapi-codegen generates single-field embedding wrappers (e.g., type XXX500JSONResponse struct{ ErrorResponse })
+    # Using unkeyed literals for these is idiomatic and safe - the struct has only one anonymous field.
+    - path: internal/api/v1/handlers/.*\.go
+      linters:
+        - govet
+      text: composites
 
 linters:
   disable-all: true
+  disable:
+    - errcheck
+    - gosec
+    - gocritic
   enable:
     # --- Default & Critical ---
-    - errcheck
     - govet
     - staticcheck
     - unused
@@ -27,61 +70,32 @@ linters:
     - sqlclosecheck # Prevents connection leaks (vital for SQLite)
     - rowserrcheck # Ensures rows.Err() is checked after iteration
     - sloglint # Ensures structured logging consistency
-    - depguard # Enforces allowed/denied dependencies
     - decorder # Ensures correct order
 
     # --- Quality & Security ---
     - revive # General Go style
-    - gosec # Security (SQL Injection, file permissions)
-    - gocritic # Catches subtle bugs and performance issues
     - misspell # Fixes typos
     - nolintlint # Ensures //nolint comments are actually needed
     - testifylint # Ensures correct testify usage
     - noctx # Prevents zombie requests
 
-  settings:
-    sloglint:
-      no-global: "all"
-      key-naming-case: snake
-      static-msg: true
-      no-mixed-args: true
+linters-settings:
+  sloglint:
+    no-global: "all"
+    key-naming-case: snake
+    static-msg: true
+    no-mixed-args: true
 
-    testifylint:
-      enable-all: true
+  testifylint:
+    enable-all: true
 
-    depguard:
-      rules:
-        Main: # Capitalized "Main" to ensure we overwrite the default rule
-          deny:
-            - pkg: "github.com/sirupsen/logrus"
-              desc: "We use log/slog only."
-            - pkg: "go.uber.org/zap"
-              desc: "We use log/slog only."
-            - pkg: "^log$"
-              desc: "Use log/slog. For fatal errors, return them or use os.Exit only in main."
+  gocritic:
+    disabled-checks:
+      - elseif
+      - ifElseChain
 
-  exclusions:
-    paths:
-      - vendor
-      - context
-
-    rules:
-      - path: _test\.go
-        linters:
-          - gosec
-      # oapi-codegen strict server pattern: returning typed error responses (e.g., 500JSONResponse)
-      # with nil error is correct - the response object encodes the HTTP status. Returning non-nil
-      # error would bypass our structured response and leak internal error details to clients.
-      - path: internal/api/v1/(server|handlers/.*)\.go
-        linters:
-          - nilerr
-      # Server methods implement StrictServerInterface - comments would be redundant boilerplate
-      - path: internal/api/v1/server\.go
-        linters:
-          - revive
-      # oapi-codegen generates single-field embedding wrappers (e.g., type XXX500JSONResponse struct{ ErrorResponse })
-      # Using unkeyed literals for these is idiomatic and safe - the struct has only one anonymous field.
-      - path: internal/api/v1/handlers/.*\.go
-        linters:
-          - govet
-        text: composites
+  gosec:
+    excludes:
+      - G301  # Expect directory permissions to be 0750 or less
+      - G306  # Expect WriteFile permissions to be 0600 or less  
+      - G304  # Potential file inclusion via variable

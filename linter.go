@@ -113,9 +113,12 @@ type InvalidClass struct {
 type ClassificationResult int
 
 const (
-	ClassMatched  ClassificationResult = iota // Has a constant (migration opportunity)
-	ClassBypassed                             // Valid CSS, no constant (allow)
-	ClassZombie                               // Doesn't exist in CSS (error)
+	// ClassMatched indicates the class has a constant available (migration opportunity).
+	ClassMatched ClassificationResult = iota
+	// ClassBypassed indicates a valid CSS class with no constant needed (allowed).
+	ClassBypassed
+	// ClassZombie indicates the class doesn't exist in CSS (error).
+	ClassZombie
 )
 
 // HardcodedString represents a CSS class string that could use a constant
@@ -129,6 +132,7 @@ type HardcodedString struct {
 // MatchType indicates how a class was matched to a constant
 type MatchType int
 
+// MatchType represents how a CSS class was matched.
 const (
 	MatchExact MatchType = iota // Direct match in ExactMap
 	MatchNone                   // No match found

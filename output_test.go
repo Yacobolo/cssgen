@@ -159,7 +159,7 @@ func TestWriteJSON(t *testing.T) {
 	assert.Equal(t, 20, output.Stats.ActuallyUsed)
 	assert.Equal(t, 30, output.Stats.MigrationOpportunities)
 	assert.Equal(t, 50, output.Stats.CompletelyUnused)
-	assert.Equal(t, 20.0, output.Stats.UsagePercentage)
+	assert.InDelta(t, 20.0, output.Stats.UsagePercentage, 0.01)
 	assert.Equal(t, 150, output.Stats.HardcodedClasses)
 	assert.Equal(t, 20, output.Stats.ConstantReferences)
 

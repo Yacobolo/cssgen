@@ -334,38 +334,38 @@ func extractClassesFromLine(line string, lineNum int, file string) []ClassRefere
 		// templ functions already handled, don't apply other patterns
 		// to avoid duplicates
 		return refs
-	} else {
-		// Standard pattern matching for other cases
-		for _, pattern := range patterns {
-			matches := pattern.regex.FindAllStringSubmatchIndex(line, -1)
-			for _, match := range matches {
-				if len(match) < 4 {
-					continue
-				}
+	}
 
-				captured := line[match[2]:match[3]]
-
-				ref := ClassReference{
-					Location: FileLocation{
-						File:   file,
-						Line:   lineNum,
-						Column: match[0] + 1, // 1-indexed (relative to original line)
-						Text:   strings.TrimSpace(line),
-					},
-					LineContent: strings.TrimSpace(line),
-					IsConstant:  pattern.isConst,
-				}
-
-				if pattern.isConst {
-					// ui.Foo -> Foo
-					ref.ConstName = captured
-				} else {
-					// Hardcoded string: Store FULL value, not split
-					ref.FullClassValue = captured
-				}
-
-				refs = append(refs, ref)
+	// Standard pattern matching for other cases
+	for _, pattern := range patterns {
+		matches := pattern.regex.FindAllStringSubmatchIndex(line, -1)
+		for _, match := range matches {
+			if len(match) < 4 {
+				continue
 			}
+
+			captured := line[match[2]:match[3]]
+
+			ref := ClassReference{
+				Location: FileLocation{
+					File:   file,
+					Line:   lineNum,
+					Column: match[0] + 1, // 1-indexed (relative to original line)
+					Text:   strings.TrimSpace(line),
+				},
+				LineContent: strings.TrimSpace(line),
+				IsConstant:  pattern.isConst,
+			}
+
+			if pattern.isConst {
+				// ui.Foo -> Foo
+				ref.ConstName = captured
+			} else {
+				// Hardcoded string: Store FULL value, not split
+				ref.FullClassValue = captured
+			}
+
+			refs = append(refs, ref)
 		}
 	}
 
