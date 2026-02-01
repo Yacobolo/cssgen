@@ -1,11 +1,27 @@
-# cssgen - CSS Constant Generator & Linter
+# cssgen
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/yacobolo/cssgen.svg)](https://pkg.go.dev/github.com/yacobolo/cssgen)
-[![Go Report Card](https://goreportcard.com/badge/github.com/yacobolo/cssgen)](https://goreportcard.com/report/github.com/yacobolo/cssgen)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI](https://github.com/yacobolo/cssgen/workflows/CI/badge.svg)](https://github.com/yacobolo/cssgen/actions)
+<p align="center">
+  <strong>Type-safe CSS class constants for Go/templ projects.</strong>
+  <br><br>
+  <a href="https://pkg.go.dev/github.com/yacobolo/cssgen">
+    <img src="https://pkg.go.dev/badge/github.com/yacobolo/cssgen.svg" alt="Go Reference">
+  </a>
+  <a href="https://goreportcard.com/report/github.com/yacobolo/cssgen">
+    <img src="https://goreportcard.com/badge/github.com/yacobolo/cssgen" alt="Go Report Card">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  </a>
+  <a href="https://github.com/yacobolo/cssgen/actions">
+    <img src="https://github.com/yacobolo/cssgen/workflows/CI/badge.svg" alt="CI">
+  </a>
+</p>
 
-**Type-safe CSS class constants for Go/templ projects.**
+<p align="center">
+  <img src="assets/mascot.png" alt="cssgen mascot - a Go gopher in a construction outfit operating a CSS-to-Go conversion factory" width="600">
+</p>
+
+---
 
 `cssgen` generates Go constants from your CSS files and provides a linter to eliminate hardcoded class strings and catch typos at build time.
 
