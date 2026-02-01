@@ -25,6 +25,21 @@
 
 `cssgen` generates Go constants from your CSS files and provides a linter to eliminate hardcoded class strings and catch typos at build time.
 
+## Table of Contents
+- [Why cssgen?](#why-cssgen)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Generated Output](#generated-output)
+- [Linting Philosophy](#linting-philosophy)
+- [Output Formats](#output-formats)
+- [Usage Examples](#usage-examples)
+- [How It Works](#how-it-works)
+- [Configuration](#configuration)
+- [FAQ](#faq)
+- [License](#license)
+- [Contributing](#contributing)
+
 ## Why cssgen?
 
 In modern Go web development with [templ](https://templ.guide), CSS class names are just strings. This creates two problems:
@@ -151,6 +166,14 @@ Use strict mode once you've migrated critical templates.
 ## Output Formats
 
 `cssgen` supports five output formats via `-output-format`:
+
+| **Format** | **Best For...** | **Visual Detail** |
+|------------|-----------------|-------------------|
+| `issues` | Local development | High (Inline code pointers) |
+| `summary` | Quick health checks | Low (Aggregated stats only) |
+| `full` | Deep-dive audits | Maximum (Everything) |
+| `markdown` | PR Comments / CI | Medium (Formatted for web) |
+| `json` | Custom Tooling | Machine-readable |
 
 ### `issues` (default)
 
@@ -342,6 +365,8 @@ check: test css-lint
 2. **Parse** - Extract classes using native CSS parser ([tdewolff/parse](https://github.com/tdewolff/parse))
 3. **Analyze** - Detect BEM patterns, build inheritance tree
 4. **Generate** - Write Go constants with rich comments
+
+> **Note:** The parser supports **standard CSS** only. For Tailwind/PostCSS-specific syntax (like `@apply` or nested selectors), ensure your build process outputs standard CSS before running `cssgen`.
 
 ### Linting Process
 
