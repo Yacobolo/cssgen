@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-cssgen
+/cssgen
 /bin/
 
 # Test binary, built with `go test -c`
@@ -43,3 +43,5 @@ build-errors.log
 
 # Generated files (for testing)
 /example-output/
+
+.opencode/plans
