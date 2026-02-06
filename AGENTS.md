@@ -65,7 +65,7 @@ golangci-lint run                         # Lint
 - Pointer receivers for state modification, value receivers otherwise
 - Error wrapping: `fmt.Errorf("context: %w", err)`, no `panic()` in library code
 - All exported items need godoc starting with item name
-- Package docs in `cssgen.go`, justify `#nosec` exclusions
+- Package docs in `internal/cssgen/cssgen.go`, justify `#nosec` exclusions
 
 ### Linting Configuration
 
@@ -94,16 +94,18 @@ golangci-lint run                         # Lint
 
 ```
 cssgen/
-├── cmd/cssgen/          # CLI entry point (main.go)
-├── testdata/            # Test fixtures (CSS files)
-├── *.go                 # Library code (flat package structure)
-├── *_test.go            # Test files
-├── Taskfile.yml         # Task runner config
-├── .golangci.yml        # Linter config
-└── README.md            # User documentation
+├── cmd/cssgen/              # CLI entry point (main.go)
+├── internal/cssgen/         # Core library code (private)
+│   ├── testdata/            # Test fixtures (CSS files)
+│   ├── *.go                 # Library implementation
+│   └── *_test.go            # Test files
+├── examples/                # Example CSS inputs/outputs
+├── Taskfile.yml             # Task runner config
+├── .golangci.yml            # Linter config
+└── README.md                # User documentation
 ```
 
-**Core files:**
+**Core files (in `internal/cssgen/`):**
 
 - `generator.go` - Main entry point, file scanning, orchestration
 - `parser.go` - CSS parsing, selector extraction

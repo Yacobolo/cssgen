@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/yacobolo/cssgen"
+	"github.com/yacobolo/cssgen/internal/cssgen"
 )
 
 var generateCmd = &cobra.Command{

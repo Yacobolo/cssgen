@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"github.com/yacobolo/cssgen"
+	"github.com/yacobolo/cssgen/internal/cssgen"
 )
 
 var lintCmd = &cobra.Command{

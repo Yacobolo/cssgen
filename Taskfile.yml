@@ -80,4 +80,4 @@ tasks:
   example:
     desc: Run cssgen on testdata
     cmds:
-      - go run {{.MAIN_PATH}} -source ./testdata -output-dir /tmp/cssgen-example -package example -verbose
+      - go run {{.MAIN_PATH}} generate --source ./internal/cssgen/testdata --output-dir /tmp/cssgen-example --package example --include "**/*.css" --verbose

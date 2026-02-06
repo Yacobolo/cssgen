@@ -11,7 +11,7 @@ import (
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
-	"github.com/yacobolo/cssgen"
+	"github.com/yacobolo/cssgen/internal/cssgen"
 )
 
 var k = koanf.New(".")

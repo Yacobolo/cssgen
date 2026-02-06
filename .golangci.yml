@@ -19,16 +19,16 @@ issues:
         - gosec
         - errcheck
     # Ignore errcheck for output/reporting files where fmt errors are acceptable
-    - path: linter\.go
+    - path: internal/cssgen/linter\.go
       linters:
         - errcheck
-    - path: reporter.*\.go
+    - path: internal/cssgen/reporter.*\.go
       linters:
         - errcheck
-    - path: output.*\.go
+    - path: internal/cssgen/output.*\.go
       linters:
         - errcheck
-    - path: scanner\.go
+    - path: internal/cssgen/scanner\.go
       linters:
         - errcheck
       text: "Error return value of `file\\.Close`"
