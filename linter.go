@@ -43,8 +43,6 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
-
-	"github.com/fatih/color"
 )
 
 // LintConfig holds linting configuration
@@ -728,21 +726,18 @@ func countUniqueFiles(references []ClassReference) int {
 
 // PrintLintReport formats and prints the lint report
 func PrintLintReport(result *LintResult, w io.Writer, verbose bool) {
-	// Color setup
-	cyan := color.New(color.FgCyan, color.Bold)
-	red := color.New(color.FgRed, color.Bold)
-	yellow := color.New(color.FgYellow, color.Bold)
-	green := color.New(color.FgGreen, color.Bold)
+	// Colors are always enabled in the legacy report path
+	useColors := true
 
 	// Header
 	fmt.Fprintln(w, "")
-	cyan.Fprintln(w, "CSS Constants Lint Report")
-	cyan.Fprintln(w, "=========================")
+	fmt.Fprintln(w, RenderStyle(StyleCyan, "CSS Constants Lint Report", useColors))
+	fmt.Fprintln(w, RenderStyle(StyleCyan, "=========================", useColors))
 
 	// ERRORS SECTION (NEW - Show first, most important)
 	if len(result.InvalidClasses) > 0 {
 		fmt.Fprintln(w, "")
-		red.Fprintln(w, "❌ ERRORS - Invalid CSS Classes")
+		fmt.Fprintln(w, RenderStyle(StyleRed, "ERRORS - Invalid CSS Classes", useColors))
 		fmt.Fprintln(w, "-------------------------------")
 		fmt.Fprintln(w, "These classes are used in templates but don't exist in any CSS file:")
 
@@ -782,7 +777,7 @@ func PrintLintReport(result *LintResult, w io.Writer, verbose bool) {
 	}
 
 	// Statistics
-	cyan.Fprintln(w, "📊 STATISTICS")
+	fmt.Fprintln(w, RenderStyle(StyleCyan, "STATISTICS", useColors))
 	fmt.Fprintln(w, "-------------")
 
 	// Add error count to stats (if any)
@@ -800,19 +795,19 @@ func PrintLintReport(result *LintResult, w io.Writer, verbose bool) {
 
 	// Adoption progress bar
 	fmt.Fprintln(w, "")
-	cyan.Fprintln(w, "📈 ADOPTION PROGRESS")
+	fmt.Fprintln(w, RenderStyle(StyleCyan, "ADOPTION PROGRESS", useColors))
 	fmt.Fprintln(w, "-------------------")
 	printProgressBar(w, result.UsagePercentage)
 
 	// Quick Wins
 	if len(result.QuickWins.SingleClass) > 0 || len(result.QuickWins.MultiClass) > 0 {
-		printQuickWins(w, result.QuickWins, green)
+		printQuickWins(w, result.QuickWins, useColors)
 	}
 
 	// Warnings summary (compact by default)
 	if len(result.UnusedClasses) > 0 || len(result.HardcodedStrings) > 0 {
 		fmt.Fprintln(w, "")
-		yellow.Fprintln(w, "⚠️  WARNINGS")
+		fmt.Fprintln(w, RenderStyle(StyleYellow, "WARNINGS", useColors))
 		fmt.Fprintln(w, "-----------")
 
 		if len(result.UnusedClasses) > 0 {
@@ -829,7 +824,7 @@ func PrintLintReport(result *LintResult, w io.Writer, verbose bool) {
 		// Unused constants
 		if len(result.UnusedClasses) > 0 {
 			fmt.Fprintln(w, "")
-			yellow.Fprintln(w, "🔍 UNUSED CONSTANTS (Detailed)")
+			fmt.Fprintln(w, RenderStyle(StyleYellow, "UNUSED CONSTANTS (Detailed)", useColors))
 			fmt.Fprintln(w, "-----------------------------")
 
 			// Group by layer
@@ -848,19 +843,19 @@ func PrintLintReport(result *LintResult, w io.Writer, verbose bool) {
 
 		// Hardcoded strings (show first 20 with detailed analysis)
 		if len(result.HardcodedStrings) > 0 {
-			printHardcodedStringsVerbose(w, result.HardcodedStrings, yellow)
+			printHardcodedStringsVerbose(w, result.HardcodedStrings, useColors)
 		}
 	} else {
 		// Compact mode: show first 5 hardcoded strings
 		if len(result.HardcodedStrings) > 0 {
-			printHardcodedStringsCompact(w, result.HardcodedStrings, 5, yellow)
+			printHardcodedStringsCompact(w, result.HardcodedStrings, 5, useColors)
 		}
 	}
 
 	// Recommendations
 	if len(result.Suggestions) > 0 {
 		fmt.Fprintln(w, "")
-		green.Fprintln(w, "✅ RECOMMENDATIONS")
+		fmt.Fprintln(w, RenderStyle(StyleGreen, "RECOMMENDATIONS", useColors))
 		fmt.Fprintln(w, "------------------")
 		for i, suggestion := range result.Suggestions {
 			fmt.Fprintf(w, "%d. %s\n", i+1, suggestion)
@@ -870,28 +865,31 @@ func PrintLintReport(result *LintResult, w io.Writer, verbose bool) {
 	// Summary
 	fmt.Fprintln(w, "")
 	if result.ErrorCount > 0 {
-		red.Fprintf(w, "❌ BUILD FAILED: %d invalid CSS class%s found. Fix these errors before deploying.\n",
-			result.ErrorCount,
-			pluralize(result.ErrorCount))
+		fmt.Fprintf(w, "%s\n", RenderStyle(StyleRed,
+			fmt.Sprintf("BUILD FAILED: %d invalid CSS class%s found. Fix these errors before deploying.",
+				result.ErrorCount, pluralize(result.ErrorCount)), useColors))
 	} else if result.UsagePercentage >= 80 {
-		green.Fprintf(w, "✓ Excellent adoption! %.1f%% of constants are in use.\n", result.UsagePercentage)
+		fmt.Fprintf(w, "%s\n", RenderStyle(StyleGreen,
+			fmt.Sprintf("Excellent adoption! %.1f%% of constants are in use.", result.UsagePercentage), useColors))
 	} else if result.UsagePercentage >= 50 {
-		yellow.Fprintf(w, "⚠ Moderate adoption. %.1f%% of constants are in use. Focus on Quick Wins to improve.\n", result.UsagePercentage)
+		fmt.Fprintf(w, "%s\n", RenderStyle(StyleYellow,
+			fmt.Sprintf("Moderate adoption. %.1f%% of constants are in use. Focus on Quick Wins to improve.", result.UsagePercentage), useColors))
 	} else {
-		red.Fprintf(w, "⚠ Low adoption. Only %.1f%% of constants are in use. Start with Quick Wins for maximum impact.\n", result.UsagePercentage)
+		fmt.Fprintf(w, "%s\n", RenderStyle(StyleRed,
+			fmt.Sprintf("Low adoption. Only %.1f%% of constants are in use. Start with Quick Wins for maximum impact.", result.UsagePercentage), useColors))
 	}
 
 	if !verbose && (len(result.UnusedClasses) > 0 || len(result.HardcodedStrings) > 0) {
-		fmt.Fprintln(w, "\nRun with -verbose for detailed breakdown")
+		fmt.Fprintln(w, "\nRun with --verbose for detailed breakdown")
 	}
 
 	fmt.Fprintln(w, "")
 }
 
 // printQuickWins prints the quick wins section with categorization
-func printQuickWins(w io.Writer, summary QuickWinsSummary, green *color.Color) {
+func printQuickWins(w io.Writer, summary QuickWinsSummary, useColors bool) {
 	fmt.Fprintln(w, "")
-	green.Fprintln(w, "🎯 QUICK WINS")
+	fmt.Fprintln(w, RenderStyle(StyleGreen, "QUICK WINS", useColors))
 	fmt.Fprintln(w, "-------------")
 
 	if len(summary.SingleClass) > 0 {
@@ -918,14 +916,14 @@ func printQuickWins(w io.Writer, summary QuickWinsSummary, green *color.Color) {
 }
 
 // printHardcodedStringsCompact prints a compact summary of hardcoded strings
-func printHardcodedStringsCompact(w io.Writer, hardcodedStrings []HardcodedString, limit int, yellow *color.Color) {
+func printHardcodedStringsCompact(w io.Writer, hardcodedStrings []HardcodedString, limit int, useColors bool) {
 	fmt.Fprintln(w, "")
-	yellow.Fprintln(w, "⚠️  HARDCODED STRINGS")
+	fmt.Fprintln(w, RenderStyle(StyleYellow, "HARDCODED STRINGS", useColors))
 	fmt.Fprintln(w, "-------------------")
 	fmt.Fprintf(w, "Found %d hardcoded class strings\n", len(hardcodedStrings))
 
 	if limit > 0 && len(hardcodedStrings) > limit {
-		fmt.Fprintf(w, "Showing first %d (use -verbose for full list)\n", limit)
+		fmt.Fprintf(w, "Showing first %d (use --verbose for full list)\n", limit)
 		hardcodedStrings = hardcodedStrings[:limit]
 	}
 
@@ -955,9 +953,9 @@ func printHardcodedStringsCompact(w io.Writer, hardcodedStrings []HardcodedStrin
 }
 
 // printHardcodedStringsVerbose prints detailed analysis of hardcoded strings
-func printHardcodedStringsVerbose(w io.Writer, hardcodedStrings []HardcodedString, yellow *color.Color) {
+func printHardcodedStringsVerbose(w io.Writer, hardcodedStrings []HardcodedString, useColors bool) {
 	fmt.Fprintln(w, "")
-	yellow.Fprintln(w, "🔍 HARDCODED STRINGS (Detailed Analysis)")
+	fmt.Fprintln(w, RenderStyle(StyleYellow, "HARDCODED STRINGS (Detailed Analysis)", useColors))
 	fmt.Fprintln(w, "---------------------------------------")
 
 	limit := 20

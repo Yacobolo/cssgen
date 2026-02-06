@@ -3,8 +3,6 @@ package cssgen
 import (
 	"fmt"
 	"io"
-
-	"github.com/fatih/color"
 )
 
 // VerboseReporter handles detailed statistics and suggestions
@@ -23,14 +21,8 @@ func NewVerboseReporter(w io.Writer, useColors bool) *VerboseReporter {
 
 // PrintStatistics outputs detailed linting statistics
 func (r *VerboseReporter) PrintStatistics(result LintResult) {
-	cyan := color.New(color.FgCyan, color.Bold)
-
 	fmt.Fprintln(r.w, "")
-	if r.useColors {
-		cyan.Fprintln(r.w, "📊 CSS Linter Statistics")
-	} else {
-		fmt.Fprintln(r.w, "CSS Linter Statistics")
-	}
+	fmt.Fprintln(r.w, RenderStyle(StyleCyan, "CSS Linter Statistics", r.useColors))
 	fmt.Fprintln(r.w, "------------------------")
 
 	fmt.Fprintf(r.w, "Total Constants:         %d\n", result.TotalConstants)
@@ -44,14 +36,8 @@ func (r *VerboseReporter) PrintStatistics(result LintResult) {
 
 // PrintAdoptionProgress shows visual progress bar
 func (r *VerboseReporter) PrintAdoptionProgress(result LintResult) {
-	cyan := color.New(color.FgCyan, color.Bold)
-
 	fmt.Fprintln(r.w, "")
-	if r.useColors {
-		cyan.Fprintln(r.w, "📈 Adoption Progress")
-	} else {
-		fmt.Fprintln(r.w, "Adoption Progress")
-	}
+	fmt.Fprintln(r.w, RenderStyle(StyleCyan, "Adoption Progress", r.useColors))
 	fmt.Fprintln(r.w, "-------------------")
 	printProgressBar(r.w, result.UsagePercentage)
 }
@@ -62,14 +48,8 @@ func (r *VerboseReporter) PrintQuickWins(result LintResult) {
 		return
 	}
 
-	green := color.New(color.FgGreen, color.Bold)
-
 	fmt.Fprintln(r.w, "")
-	if r.useColors {
-		green.Fprintln(r.w, "🎯 Quick Wins")
-	} else {
-		fmt.Fprintln(r.w, "Quick Wins")
-	}
+	fmt.Fprintln(r.w, RenderStyle(StyleGreen, "Quick Wins", r.useColors))
 	fmt.Fprintln(r.w, "-------------")
 
 	if len(result.QuickWins.SingleClass) > 0 {
@@ -101,14 +81,8 @@ func (r *VerboseReporter) PrintWarnings(result LintResult) {
 		return
 	}
 
-	yellow := color.New(color.FgYellow, color.Bold)
-
 	fmt.Fprintln(r.w, "")
-	if r.useColors {
-		yellow.Fprintln(r.w, "⚠️  Warnings")
-	} else {
-		fmt.Fprintln(r.w, "Warnings")
-	}
+	fmt.Fprintln(r.w, RenderStyle(StyleYellow, "Warnings", r.useColors))
 	fmt.Fprintln(r.w, "-----------")
 
 	for _, warning := range result.Warnings {

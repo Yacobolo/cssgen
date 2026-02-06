@@ -6,8 +6,6 @@ import (
 	"os"
 	"sort"
 	"strings"
-
-	"github.com/fatih/color"
 )
 
 // Reporter handles formatting and outputting linting results
@@ -83,16 +81,10 @@ func (r *Reporter) printIssue(issue Issue) {
 	}
 
 	// Print main issue line
-	if r.useColors {
-		cyan := color.New(color.FgCyan, color.Bold)
-		cyan.Fprint(r.w, location)
-		fmt.Fprintf(r.w, " %s", issue.Text)
-
-		gray := color.New(color.FgHiBlack)
-		gray.Fprintf(r.w, "%s\n", linterSuffix)
-	} else {
-		fmt.Fprintf(r.w, "%s %s%s\n", location, issue.Text, linterSuffix)
-	}
+	fmt.Fprintf(r.w, "%s %s%s\n",
+		RenderStyle(StyleCyan, location, r.useColors),
+		issue.Text,
+		RenderStyle(StyleGray, linterSuffix, r.useColors))
 
 	// Print source lines with caret indicator
 	if r.printLines && len(issue.SourceLines) > 0 {
@@ -102,12 +94,7 @@ func (r *Reporter) printIssue(issue Issue) {
 
 		// Print caret indicator
 		caret := r.buildCaretIndicator(issue.SourceLines[0], issue.Pos.Column)
-		if r.useColors {
-			yellow := color.New(color.FgYellow, color.Bold)
-			yellow.Fprintf(r.w, "\t%s\n", caret)
-		} else {
-			fmt.Fprintf(r.w, "\t%s\n", caret)
-		}
+		fmt.Fprintf(r.w, "\t%s\n", RenderStyle(StyleYellow, caret, r.useColors))
 	}
 }
 
@@ -196,12 +183,7 @@ func (r *Reporter) PrintSummary(result LintResult) {
 	// Print helpful hint if there are issues
 	if totalIssues > 0 {
 		fmt.Fprintln(r.w, "")
-		if r.useColors {
-			gray := color.New(color.FgHiBlack)
-			gray.Fprintf(r.w, "Hint: Run with -output-format full to see statistics and Quick Wins\n")
-		} else {
-			fmt.Fprintf(r.w, "Hint: Run with -output-format full to see statistics and Quick Wins\n")
-		}
+		fmt.Fprintln(r.w, RenderStyle(StyleGray, "Hint: Run with --output-format full to see statistics and Quick Wins", r.useColors))
 	}
 }
 
