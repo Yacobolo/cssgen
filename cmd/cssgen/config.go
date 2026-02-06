@@ -16,9 +16,15 @@ import (
 
 var k = koanf.New(".")
 
+// activeCmd holds the cobra command that was executed, used to check
+// whether a flag was explicitly set on the command line.
+var activeCmd *cobra.Command
+
 // loadConfig loads configuration with precedence: flags > env > file > defaults.
 // It must be called after cobra parses flags (in PreRunE or RunE).
 func loadConfig(cmd *cobra.Command) error {
+	activeCmd = cmd
+
 	// Resolve config file path from flag
 	configPath, _ := cmd.Flags().GetString("config")
 	if configPath == "" {
@@ -31,7 +37,9 @@ func loadConfig(cmd *cobra.Command) error {
 	}
 
 	// 3. CLI flags (highest precedence — only flags that were explicitly set)
-	// Merge flags from the specific command and its parent (root) flags
+	// Merge flags from the specific command and its parent (root) flags.
+	// The koanf instance (k) is passed so posflag can skip flags whose
+	// keys already exist from the config file / env providers.
 	if err := k.Load(posflag.Provider(cmd.Flags(), ".", k), nil); err != nil {
 		return fmt.Errorf("loading command flags: %w", err)
 	}
@@ -126,10 +134,29 @@ func buildLintConfig(generatedFile string) cssgen.LintConfig {
 	}
 }
 
-// getStringWithFallback checks the flag key first, then the config file key, then returns the default.
+// flagChanged reports whether the given flag was explicitly set on the command line.
+func flagChanged(flagKey string) bool {
+	if activeCmd == nil {
+		return false
+	}
+	if f := activeCmd.Flags().Lookup(flagKey); f != nil {
+		return f.Changed
+	}
+	// Check inherited (persistent) flags from parent commands
+	if f := activeCmd.InheritedFlags().Lookup(flagKey); f != nil {
+		return f.Changed
+	}
+	return false
+}
+
+// getStringWithFallback checks the flag key (only if explicitly set on CLI),
+// then the config file key, then returns the default.
 func getStringWithFallback(flagKey, configKey, defaultVal string) string {
-	if v := k.String(flagKey); v != "" {
-		return v
+	// CLI flag takes precedence — but only if explicitly changed
+	if flagChanged(flagKey) {
+		if v := k.String(flagKey); v != "" {
+			return v
+		}
 	}
 	if v := k.String(configKey); v != "" {
 		return v
@@ -137,9 +164,10 @@ func getStringWithFallback(flagKey, configKey, defaultVal string) string {
 	return defaultVal
 }
 
-// getBoolWithFallback checks the flag key first, then the config file key, then returns the default.
+// getBoolWithFallback checks the flag key (only if explicitly set on CLI),
+// then the config file key, then returns the default.
 func getBoolWithFallback(flagKey, configKey string, defaultVal bool) bool {
-	if k.Exists(flagKey) {
+	if flagChanged(flagKey) {
 		return k.Bool(flagKey)
 	}
 	if k.Exists(configKey) {
@@ -148,9 +176,10 @@ func getBoolWithFallback(flagKey, configKey string, defaultVal bool) bool {
 	return defaultVal
 }
 
-// getIntWithFallback checks the flag key first, then the config file key, then returns the default.
+// getIntWithFallback checks the flag key (only if explicitly set on CLI),
+// then the config file key, then returns the default.
 func getIntWithFallback(flagKey, configKey string, defaultVal int) int {
-	if k.Exists(flagKey) {
+	if flagChanged(flagKey) {
 		return k.Int(flagKey)
 	}
 	if k.Exists(configKey) {
@@ -159,9 +188,10 @@ func getIntWithFallback(flagKey, configKey string, defaultVal int) int {
 	return defaultVal
 }
 
-// getFloat64WithFallback checks the flag key first, then the config file key, then returns the default.
+// getFloat64WithFallback checks the flag key (only if explicitly set on CLI),
+// then the config file key, then returns the default.
 func getFloat64WithFallback(flagKey, configKey string, defaultVal float64) float64 {
-	if k.Exists(flagKey) {
+	if flagChanged(flagKey) {
 		return k.Float64(flagKey)
 	}
 	if k.Exists(configKey) {

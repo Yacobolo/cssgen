@@ -10,9 +10,14 @@ var rootCmd = &cobra.Command{
 	Long: `Type-safe CSS class constants with 1:1 mapping.
 Each CSS class becomes exactly one Go constant.
 Composition happens in templates: { ui.Btn, ui.BtnPrimary }`,
-	// Default behavior: run generate when no subcommand is given
-	RunE: func(_ *cobra.Command, args []string) error {
-		return generateCmd.RunE(generateCmd, args)
+	// Default behavior: run generate when no subcommand is given.
+	// We must call loadConfig here because PreRunE of generateCmd
+	// is not triggered when delegating via rootCmd.RunE.
+	RunE: func(cmd *cobra.Command, _ []string) error {
+		if err := loadConfig(cmd); err != nil {
+			return err
+		}
+		return runGenerate(generateCmd, nil)
 	},
 	SilenceUsage:  true,
 	SilenceErrors: true,

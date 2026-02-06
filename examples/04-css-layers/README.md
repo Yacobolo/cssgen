@@ -200,14 +200,16 @@ templ DynamicCard(primary bool) {
 ## Regenerating
 
 ```bash
-# From project root
-cssgen -source ./examples/04-css-layers/input \
-        -output-dir ./examples/04-css-layers/output \
-        -package ui \
-        -include "**/*.css"
+# Using config file (from this directory — reads .cssgen.yaml automatically)
+cssgen
 
-# From this directory
-cssgen -source ./input -output-dir ./output -package ui -include "**/*.css"
+# Using CLI flags (from this directory)
+cssgen generate --source ./input --output-dir ./output --package ui --include "**/*.css"
+
+# From the project root
+cssgen generate --source ./examples/04-css-layers/input \
+        --output-dir ./examples/04-css-layers/output \
+        --package ui --include "**/*.css"
 ```
 
 ## Next Steps

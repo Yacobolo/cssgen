@@ -44,6 +44,7 @@ Each example directory contains:
 
 ```
 example-name/
+├── .cssgen.yaml       # Config file — run `cssgen` from here to regenerate
 ├── README.md          # Detailed explanation of the example
 ├── input/             # CSS source files
 │   └── *.css         # Well-commented CSS demonstrating patterns
@@ -72,14 +73,16 @@ Simply read the input CSS and generated output Go files. Each example's README e
 Try regenerating the output yourself:
 
 ```bash
-# From an example directory
-cssgen -source ./input -output-dir ./output -package ui -include "**/*.css"
+# From an example directory (each has a .cssgen.yaml config file)
+cssgen
+
+# Or using explicit CLI flags
+cssgen generate --source ./input --output-dir ./output --package ui --include "**/*.css"
 
 # From project root
-cssgen -source ./examples/01-basic/input \
-        -output-dir ./examples/01-basic/output \
-        -package ui \
-        -include "**/*.css"
+cssgen generate --source ./examples/01-basic/input \
+        --output-dir ./examples/01-basic/output \
+        --package ui --include "**/*.css"
 ```
 
 ### 3. Experiment
@@ -282,7 +285,11 @@ cssgen's generated comments are educational:
 ### 5. Run cssgen Often
 Regenerate after CSS changes:
 ```bash
-cssgen -source ./styles -output-dir ./ui -package ui -include "**/*.css"
+# With a .cssgen.yaml config file in your project root
+cssgen
+
+# Or with explicit flags
+cssgen generate --source ./styles --output-dir ./ui --package ui --include "**/*.css"
 ```
 
 Add to your build process or use a file watcher.
@@ -292,12 +299,16 @@ Add to your build process or use a file watcher.
 To regenerate all examples at once:
 
 ```bash
-# Using a loop
+# Using config files (each example has .cssgen.yaml)
 for dir in examples/*/; do
-  cssgen -source "$dir/input" \
-          -output-dir "$dir/output" \
-          -package ui \
-          -include "**/*.css"
+  (cd "$dir" && cssgen)
+done
+
+# Or using explicit CLI flags
+for dir in examples/*/; do
+  cssgen generate --source "$dir/input" \
+          --output-dir "$dir/output" \
+          --package ui --include "**/*.css"
 done
 ```
 

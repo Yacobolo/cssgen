@@ -1,0 +1,10 @@
+# cssgen configuration for this example
+# Run `cssgen` from this directory to regenerate output
+
+package: ui
+
+generate:
+  source: ./input
+  output-dir: ./output
+  include:
+    - "**/*.css"

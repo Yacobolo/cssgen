@@ -110,14 +110,16 @@ templ VerticalNav(items []NavItem) {
 ## Regenerating
 
 ```bash
-# From project root
-cssgen -source ./examples/02-bem-methodology/input \
-        -output-dir ./examples/02-bem-methodology/output \
-        -package ui \
-        -include "**/*.css"
+# Using config file (from this directory — reads .cssgen.yaml automatically)
+cssgen
 
-# From this directory
-cssgen -source ./input -output-dir ./output -package ui -include "**/*.css"
+# Using CLI flags (from this directory)
+cssgen generate --source ./input --output-dir ./output --package ui --include "**/*.css"
+
+# From the project root
+cssgen generate --source ./examples/02-bem-methodology/input \
+        --output-dir ./examples/02-bem-methodology/output \
+        --package ui --include "**/*.css"
 ```
 
 ## Next Steps

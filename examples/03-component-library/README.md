@@ -157,14 +157,16 @@ Elements describe function, not appearance:
 ## Regenerating
 
 ```bash
-# From project root
-cssgen -source ./examples/03-component-library/input \
-        -output-dir ./examples/03-component-library/output \
-        -package ui \
-        -include "**/*.css"
+# Using config file (from this directory — reads .cssgen.yaml automatically)
+cssgen
 
-# From this directory
-cssgen -source ./input -output-dir ./output -package ui -include "**/*.css"
+# Using CLI flags (from this directory)
+cssgen generate --source ./input --output-dir ./output --package ui --include "**/*.css"
+
+# From the project root
+cssgen generate --source ./examples/03-component-library/input \
+        --output-dir ./examples/03-component-library/output \
+        --package ui --include "**/*.css"
 ```
 
 ## Next Steps

@@ -314,14 +314,16 @@ templ Component() {
 ## Regenerating
 
 ```bash
-# From project root
-cssgen -source ./examples/06-complex-selectors/input \
-        -output-dir ./examples/06-complex-selectors/output \
-        -package ui \
-        -include "**/*.css"
+# Using config file (from this directory — reads .cssgen.yaml automatically)
+cssgen
 
-# From this directory
-cssgen -source ./input -output-dir ./output -package ui -include "**/*.css"
+# Using CLI flags (from this directory)
+cssgen generate --source ./input --output-dir ./output --package ui --include "**/*.css"
+
+# From the project root
+cssgen generate --source ./examples/06-complex-selectors/input \
+        --output-dir ./examples/06-complex-selectors/output \
+        --package ui --include "**/*.css"
 ```
 
 ## Next Steps

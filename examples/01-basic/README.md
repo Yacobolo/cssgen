@@ -58,13 +58,16 @@ const BtnPrimary = "btn--primary"
 To regenerate the output file from CSS:
 
 ```bash
-# From the project root
-cssgen -source ./examples/01-basic/input \
-        -output-dir ./examples/01-basic/output \
-        -package ui
+# Using config file (from this directory — reads .cssgen.yaml automatically)
+cssgen
 
-# Or from this directory
-cssgen -source ./input -output-dir ./output -package ui
+# Using CLI flags (from this directory)
+cssgen generate --source ./input --output-dir ./output --package ui --include "**/*.css"
+
+# From the project root
+cssgen generate --source ./examples/01-basic/input \
+        --output-dir ./examples/01-basic/output \
+        --package ui --include "**/*.css"
 ```
 
 ## Usage in Go/templ
