@@ -30,6 +30,7 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Examples](#examples)
 - [Generated Output](#generated-output)
 - [Linting Philosophy](#linting-philosophy)
 - [Output Formats](#output-formats)
@@ -117,6 +118,28 @@ cssg -lint-only -strict
 # Full report with statistics and Quick Wins
 cssg -lint-only -output-format full
 ```
+
+## Examples
+
+The [examples/](./examples/) directory contains comprehensive examples showing how cssgen transforms CSS into type-safe Go constants:
+
+| Example | Focus | Complexity |
+|---------|-------|------------|
+| [01-basic](./examples/01-basic/) | Simple button styles with BEM modifiers | ⭐ Beginner |
+| [02-bem-methodology](./examples/02-bem-methodology/) | Comprehensive BEM patterns | ⭐⭐ Intermediate |
+| [03-component-library](./examples/03-component-library/) | Production-ready UI components | ⭐⭐⭐ Advanced |
+| [04-css-layers](./examples/04-css-layers/) | CSS cascade layers (@layer) | ⭐⭐ Intermediate |
+| [05-utility-first](./examples/05-utility-first/) | Utility class patterns (Tailwind-style) | ⭐⭐ Intermediate |
+| [06-complex-selectors](./examples/06-complex-selectors/) | Advanced CSS selector handling | ⭐⭐⭐ Advanced |
+
+**New to cssgen?** Start with [examples/01-basic](./examples/01-basic/) for a gentle introduction.
+
+Each example includes:
+- **Input CSS** - Production-quality, well-commented CSS files
+- **Output Go** - Pre-generated constants with rich documentation
+- **README** - Detailed explanation of patterns and usage
+
+See the [examples README](./examples/README.md) for a complete guide.
 
 ## Generated Output
 

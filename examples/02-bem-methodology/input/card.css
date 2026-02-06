@@ -1,0 +1,45 @@
+/* Card component demonstrating BEM Block__Element--Modifier pattern */
+
+/* Block: The component itself */
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Element: Card header section */
+.card__header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+/* Element: Card body section (main content) */
+.card__body {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+/* Element: Card footer section */
+.card__footer {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Modifier: Featured card with elevated styling */
+.card--featured {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 10px 15px rgba(59, 130, 246, 0.2);
+}
+
+/* Modifier: Compact card with reduced padding */
+.card--compact .card__header,
+.card--compact .card__body,
+.card--compact .card__footer {
+  padding: 0.75rem;
+}

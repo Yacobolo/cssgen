@@ -1,0 +1,236 @@
+/* Advanced CSS selectors - demonstrating what cssgen extracts vs. ignores */
+
+/* ========================================
+   SIMPLE CLASS SELECTORS (✓ Extracted)
+   ======================================== */
+
+/* Single class - cssgen extracts this */
+.button {
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* Multiple classes in one ruleset - each extracted separately */
+.primary,
+.secondary,
+.tertiary {
+  font-weight: 500;
+}
+
+/* ========================================
+   PSEUDO-CLASSES (✓ Documented, not extracted)
+   ======================================== */
+
+/* Base class extracted, pseudo-class documented in comments */
+.link {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.link:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.link:active {
+  color: #1d4ed8;
+}
+
+.link:visited {
+  color: #7c3aed;
+}
+
+/* Form input states */
+.input {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input:invalid {
+  border-color: #ef4444;
+}
+
+/* ========================================
+   PSEUDO-ELEMENTS (✓ Documented)
+   ======================================== */
+
+/* Base class extracted, pseudo-elements documented */
+.quote {
+  position: relative;
+  padding-left: 1.5rem;
+  font-style: italic;
+}
+
+.quote::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  font-size: 2rem;
+  color: #9ca3af;
+}
+
+.quote::after {
+  content: '"';
+  color: #9ca3af;
+}
+
+/* Decorative element */
+.badge {
+  position: relative;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: #dbeafe;
+  border-radius: 9999px;
+}
+
+.badge::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+}
+
+/* ========================================
+   DESCENDANT COMBINATORS (✓ Class parts extracted)
+   ======================================== */
+
+/* Both .nav and .nav__item extracted */
+.nav .nav__item {
+  padding: 0.5rem;
+}
+
+/* All three classes extracted: .card, .card__header, .card__title */
+.card .card__header .card__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* ========================================
+   CHILD COMBINATOR (>) (✓ Class parts extracted)
+   ======================================== */
+
+/* Both .menu and .menu__item extracted */
+.menu > .menu__item {
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   ADJACENT SIBLING (+) (✓ Class parts extracted)
+   ======================================== */
+
+/* Both .label and .input extracted */
+.label + .input {
+  margin-top: 0.25rem;
+}
+
+/* ========================================
+   ATTRIBUTE SELECTORS (✗ Not extracted)
+   ======================================== */
+
+/* Attribute selectors don't generate constants */
+[data-theme="dark"] {
+  background-color: #111827;
+  color: white;
+}
+
+input[type="text"] {
+  border: 1px solid #d1d5db;
+}
+
+.button[disabled] {
+  opacity: 0.5;
+}
+
+/* ========================================
+   COMPLEX COMBINATIONS
+   ======================================== */
+
+/* Only .dropdown and .dropdown__menu extracted */
+.dropdown.is-open .dropdown__menu {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* All class parts extracted, pseudo-classes documented */
+.tabs .tabs__tab:hover:not(.tabs__tab--active) {
+  background-color: #f3f4f6;
+}
+
+/* Classes extracted: .modal, .modal__overlay, .modal__dialog */
+.modal.is-visible .modal__overlay,
+.modal.is-visible .modal__dialog {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ========================================
+   MEDIA QUERIES (✓ Classes extracted)
+   ======================================== */
+
+/* Base class extracted */
+.responsive {
+  display: block;
+}
+
+/* Same class, responsive styles documented */
+@media (min-width: 768px) {
+  .responsive {
+    display: flex;
+  }
+}
+
+/* ========================================
+   SPECIAL CASES
+   ======================================== */
+
+/* Universal selector - no extraction */
+* {
+  box-sizing: border-box;
+}
+
+/* Element selector - no extraction */
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* ID selector - typically not extracted (classes preferred) */
+#header {
+  height: 4rem;
+}
+
+/* Class with namespace/prefix */
+.js-trigger {
+  cursor: pointer;
+}
+
+/* Internal class (starts with underscore) */
+._internal {
+  display: none;
+}
+
+/* Multiple classes on same element (all extracted separately) */
+.btn.btn--primary.btn--large {
+  padding: 1rem 2rem;
+}

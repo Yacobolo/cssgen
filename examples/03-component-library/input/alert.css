@@ -1,0 +1,91 @@
+/* Alert component - notification and message boxes */
+
+.alert {
+  position: relative;
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+
+/* Alert icon element */
+.alert__icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Alert content wrapper */
+.alert__content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Alert title element */
+.alert__title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Alert description element */
+.alert__description {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Alert actions container (buttons) */
+.alert__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* Alert close button */
+.alert__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.alert__close:hover {
+  opacity: 1;
+}
+
+/* Type modifiers - semantic variants */
+.alert--success {
+  background-color: #d1fae5;
+  border-color: #6ee7b7;
+  color: #065f46;
+}
+
+.alert--warning {
+  background-color: #fef3c7;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.alert--error {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.alert--info {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+
+/* Style modifier - outlined version */
+.alert--outline {
+  background-color: transparent;
+  border-width: 2px;
+}

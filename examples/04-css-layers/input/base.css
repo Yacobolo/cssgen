@@ -1,0 +1,40 @@
+/* Base layer - CSS resets and foundational styles */
+
+@layer base {
+  /* Reset default margins and paddings */
+  .reset {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* Base typography */
+  .text-base {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #111827;
+  }
+
+  /* Container for content */
+  .container {
+    width: 100%;
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Base link styles */
+  .link {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .link:hover {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+}
